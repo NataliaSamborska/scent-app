@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#d87a2f" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <title>Indoor Scent Difficulty</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="hero-card">
+        <p class="eyebrow">Indoor Scent Work</p>
+        <h1>Assess indoor search difficulty before you set the hide.</h1>
+        <p class="hero-copy">
+          Choose the indoor conditions for your setup and get a live score, a training label,
+          and a specific explanation of which variables are likely making the scent picture
+          easier or harder for the dog.
+        </p>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <div>
+            <p class="eyebrow">Indoor V1</p>
+            <h2>Describe the search space</h2>
+          </div>
+          <button id="resetButton" class="ghost-button" type="button">Reset</button>
+        </div>
+
+        <form id="difficultyForm" class="field-grid">
+          <label class="field">
+            <span>Space size</span>
+            <select name="spaceSize">
+              <option value="1" data-summary="micro space">Micro space</option>
+              <option value="2" data-summary="standard space">Standard space</option>
+              <option value="3" data-summary="large space">Large space</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Layout type</span>
+            <select name="layoutType">
+              <option value="1" data-summary="single room layout">Single room</option>
+              <option value="2" data-summary="multi-room connected layout">Multi-room connected</option>
+              <option value="3" data-summary="open plan layout">Open plan</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Vertical complexity</span>
+            <select name="verticalComplexity">
+              <option value="1" data-summary="low placement">Low</option>
+              <option value="2" data-summary="mid placement">Mid</option>
+              <option value="3" data-summary="high placement">High</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Airflow complexity</span>
+            <select name="airflowComplexity">
+              <option value="1" data-summary="stable airflow">Stable</option>
+              <option value="2" data-summary="moderate airflow">Moderate</option>
+              <option value="3" data-summary="complex airflow">Complex</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Corners and edges</span>
+            <select name="cornersEdges">
+              <option value="1" data-summary="trapping corners and edges">Trapping</option>
+              <option value="2" data-summary="mixed corners and open areas">Mixed</option>
+              <option value="3" data-summary="open dispersing area">Open / dispersing</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Surface and material</span>
+            <select name="surfaceMaterial">
+              <option value="1" data-summary="soft holding material">Soft / holding</option>
+              <option value="2" data-summary="moderate balanced material">Moderate / balanced</option>
+              <option value="3" data-summary="hard fast-moving material">Hard / fast-moving</option>
+            </select>
+          </label>
+        </form>
+      </section>
+
+      <section class="score-panel">
+        <div class="score-ring">
+          <div class="score-ring-inner">
+            <span id="scoreValue">6</span>
+            <span class="score-label">Difficulty</span>
+          </div>
+        </div>
+
+        <div class="score-details">
+          <p id="bandLabel" class="band-label">Beginner</p>
+          <p id="bandDescription" class="band-description">
+            This setup gives the dog a cleaner indoor scent picture with fewer competing scent effects.
+          </p>
+
+          <div class="insight-block">
+            <p class="insight-title">Top contributors</p>
+            <ul id="topFactors" class="chip-list"></ul>
+          </div>
+
+          <div class="insight-block">
+            <p class="insight-title">Training note</p>
+            <p id="trainingNote" class="training-note"></p>
+          </div>
+
+          <p class="heuristic-note">
+            This score is a practical training heuristic. Real scent behavior still depends on
+            combinations, timing, and what the dog brings into the search that day.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
