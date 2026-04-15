@@ -157,11 +157,12 @@ function animatePanelsIn() {
     panel.hidden = false;
     panel.removeAttribute("hidden");
     panel.style.setProperty("--enter-delay", `${index * 70}ms`);
-    panel.classList.remove("is-entered");
+    panel.classList.remove("is-entered", "is-visible");
     panel.classList.add("is-entering");
 
     window.requestAnimationFrame(() => {
       panel.classList.add("is-entered");
+      panel.classList.add("is-visible");
     });
 
     window.setTimeout(() => {
@@ -174,14 +175,18 @@ function resetPanelAnimation() {
   animatedPanels.forEach((panel) => {
     panel.hidden = true;
     panel.setAttribute("hidden", "");
-    panel.classList.remove("is-entering", "is-entered");
+    panel.classList.remove("is-entering", "is-entered", "is-visible");
     panel.style.removeProperty("--enter-delay");
   });
 }
 
 function scrollToPanel(panel) {
   window.setTimeout(() => {
-    panel.scrollIntoView({ behavior: "smooth", block: "start" });
+    try {
+      panel.scrollIntoView({ behavior: "smooth", block: "start" });
+    } catch (error) {
+      panel.scrollIntoView();
+    }
   }, 40);
 }
 
@@ -238,7 +243,14 @@ function setMode(mode) {
   });
 
   Object.entries(models).forEach(([key, model]) => {
-    model.form.hidden = key !== mode;
+    const shouldHide = key !== mode;
+    model.form.hidden = shouldHide;
+
+    if (shouldHide) {
+      model.form.setAttribute("hidden", "");
+    } else {
+      model.form.removeAttribute("hidden");
+    }
   });
 
   const model = models[mode];
@@ -255,7 +267,7 @@ function showSetupChooser() {
   currentMode = null;
   selectorPanel.hidden = false;
   selectorPanel.removeAttribute("hidden");
-  selectorPanel.classList.remove("is-exiting");
+  selectorPanel.classList.remove("is-exiting", "is-hidden");
   selectorPanel.classList.add("is-returning");
   resetPanelAnimation();
 
@@ -272,12 +284,14 @@ function showSetupChooser() {
 
 modeButtons.forEach((button) => {
   button.addEventListener("click", () => {
+    setMode(button.dataset.mode);
     selectorPanel.classList.add("is-exiting");
+
     window.setTimeout(() => {
+      selectorPanel.classList.add("is-hidden");
       selectorPanel.hidden = true;
       selectorPanel.setAttribute("hidden", "");
       selectorPanel.classList.remove("is-exiting");
-      setMode(button.dataset.mode);
     }, 220);
   });
 });
