@@ -21,6 +21,10 @@
   box-sizing: border-box;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 body {
   margin: 0;
   min-height: 100vh;
@@ -118,6 +122,11 @@ h1 {
   padding: 24px;
 }
 
+.selector-panel {
+  display: grid;
+  gap: 14px;
+}
+
 .panel-header,
 .score-panel {
   display: flex;
@@ -130,6 +139,19 @@ h1 {
   margin-bottom: 18px;
 }
 
+.panel-copy {
+  margin-top: 10px;
+  max-width: 58ch;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.mode-switch {
+  display: grid;
+  gap: 12px;
+}
+
+.mode-button,
 .ghost-button {
   border: 1px solid var(--line);
   background: rgba(255, 255, 255, 0.65);
@@ -137,6 +159,19 @@ h1 {
   padding: 12px 16px;
   border-radius: 999px;
   font: inherit;
+}
+
+.mode-button {
+  min-height: 56px;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.mode-button.is-active {
+  border-color: rgba(157, 78, 23, 0.26);
+  background: linear-gradient(180deg, rgba(216, 122, 47, 0.22), rgba(243, 211, 178, 0.42));
+  color: var(--accent-deep);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
 }
 
 .field-grid {
@@ -202,6 +237,12 @@ h1 {
   color: var(--muted);
 }
 
+.score-meta {
+  margin-top: 4px;
+  font-size: 0.86rem;
+  color: var(--muted);
+}
+
 .score-details {
   width: 100%;
   max-width: 540px;
@@ -240,25 +281,29 @@ h1 {
   color: var(--accent-deep);
 }
 
-.chip-list {
+.reason-list {
   list-style: none;
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
   gap: 10px;
   margin: 12px 0 0;
   padding: 0;
 }
 
-.chip-list li {
-  padding: 10px 12px;
-  border-radius: 999px;
-  background: rgba(216, 122, 47, 0.12);
-  color: var(--accent-deep);
+.reason-list li {
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(216, 122, 47, 0.15);
+  background: rgba(255, 255, 255, 0.55);
+  color: var(--ink);
   font-size: 0.92rem;
-  font-weight: 600;
+  line-height: 1.5;
 }
 
 @media (min-width: 760px) {
+  .mode-switch {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .field-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
