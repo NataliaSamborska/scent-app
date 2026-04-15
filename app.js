@@ -1,12 +1,14 @@
 const indoorButton = document.getElementById("indoorButton");
 const outdoorButton = document.getElementById("outdoorButton");
 const modeButtons = [indoorButton, outdoorButton];
+const selectorPanel = document.getElementById("selectorPanel");
 const conditionsPanel = document.getElementById("conditionsPanel");
 const scorePanel = document.getElementById("scorePanel");
 const modeEyebrow = document.getElementById("modeEyebrow");
 const modeTitle = document.getElementById("modeTitle");
 const modeSummary = document.getElementById("modeSummary");
 const resetButton = document.getElementById("resetButton");
+const changeModeButton = document.getElementById("changeModeButton");
 const indoorForm = document.getElementById("indoorForm");
 const outdoorForm = document.getElementById("outdoorForm");
 const scoreValue = document.getElementById("scoreValue");
@@ -16,6 +18,7 @@ const bandDescription = document.getElementById("bandDescription");
 const whyList = document.getElementById("whyList");
 const trainingNote = document.getElementById("trainingNote");
 const scoreRing = document.querySelector(".score-ring");
+const animatedPanels = [conditionsPanel, scorePanel];
 
 let currentMode = null;
 
@@ -149,6 +152,31 @@ function collectFactors(form) {
   });
 }
 
+function animatePanelsIn() {
+  animatedPanels.forEach((panel, index) => {
+    panel.hidden = false;
+    panel.style.setProperty("--enter-delay", `${index * 70}ms`);
+    panel.classList.remove("is-entered");
+    panel.classList.add("is-entering");
+
+    window.requestAnimationFrame(() => {
+      panel.classList.add("is-entered");
+    });
+
+    window.setTimeout(() => {
+      panel.classList.remove("is-entering");
+    }, 420 + index * 70);
+  });
+}
+
+function resetPanelAnimation() {
+  animatedPanels.forEach((panel) => {
+    panel.hidden = true;
+    panel.classList.remove("is-entering", "is-entered");
+    panel.style.removeProperty("--enter-delay");
+  });
+}
+
 function getBand(model, score) {
   return model.bands.find((band) => score <= band.max) ?? model.bands[model.bands.length - 1];
 }
@@ -209,15 +237,36 @@ function setMode(mode) {
   modeEyebrow.textContent = model.eyebrow;
   modeTitle.textContent = model.title;
   modeSummary.textContent = model.summary;
-  conditionsPanel.hidden = false;
-  scorePanel.hidden = false;
+  animatePanelsIn();
 
   updateScore();
 }
 
+function showSetupChooser() {
+  currentMode = null;
+  selectorPanel.hidden = false;
+  selectorPanel.classList.remove("is-exiting");
+  selectorPanel.classList.add("is-returning");
+  resetPanelAnimation();
+
+  modeButtons.forEach((button) => {
+    button.classList.remove("is-active");
+    button.setAttribute("aria-pressed", "false");
+  });
+
+  window.setTimeout(() => {
+    selectorPanel.classList.remove("is-returning");
+  }, 320);
+}
+
 modeButtons.forEach((button) => {
   button.addEventListener("click", () => {
-    setMode(button.dataset.mode);
+    selectorPanel.classList.add("is-exiting");
+    window.setTimeout(() => {
+      selectorPanel.hidden = true;
+      selectorPanel.classList.remove("is-exiting");
+      setMode(button.dataset.mode);
+    }, 220);
   });
 });
 
@@ -238,4 +287,8 @@ resetButton.addEventListener("click", () => {
 
   models[currentMode].form.reset();
   updateScore();
+});
+
+changeModeButton.addEventListener("click", () => {
+  showSetupChooser();
 });
