@@ -131,6 +131,11 @@ h1 {
 .selector-panel.is-exiting {
   opacity: 0;
   transform: translateY(-8px);
+  pointer-events: none;
+}
+
+.selector-panel.is-hidden {
+  display: none;
 }
 
 .selector-panel.is-returning {
@@ -258,7 +263,9 @@ h1 {
 }
 
 #conditionsPanel.is-entered,
-#scorePanel.is-entered {
+#scorePanel.is-entered,
+#conditionsPanel.is-visible,
+#scorePanel.is-visible {
   opacity: 1;
   transform: translateY(0) scale(1);
 }
