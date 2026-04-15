@@ -20,11 +20,7 @@
         </p>
       </section>
 
-      <section class="panel selector-panel">
-        <p class="eyebrow">Start Here</p>
-        <h2>Choose the setup type</h2>
-        <p class="panel-copy">Only one choice first. Pick the environment, then fill in the details.</p>
-
+      <section id="selectorPanel" class="panel selector-panel">
         <div class="mode-switch" role="group" aria-label="Choose setup type">
           <button
             id="indoorButton"
@@ -54,7 +50,10 @@
             <h2 id="modeTitle">Describe the search space</h2>
             <p id="modeSummary" class="panel-copy"></p>
           </div>
-          <button id="resetButton" class="ghost-button" type="button">Reset</button>
+          <div class="header-actions">
+            <button id="changeModeButton" class="ghost-button" type="button">Change setup</button>
+            <button id="resetButton" class="ghost-button" type="button">Reset</button>
+          </div>
         </div>
 
         <form id="indoorForm" class="field-grid scoring-form" hidden>
