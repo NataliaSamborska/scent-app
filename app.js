@@ -18,7 +18,6 @@ const bandDescription = document.getElementById("bandDescription");
 const whyList = document.getElementById("whyList");
 const trainingNote = document.getElementById("trainingNote");
 const scoreRing = document.querySelector(".score-ring");
-const animatedPanels = [conditionsPanel, scorePanel];
 
 let currentMode = null;
 
@@ -152,34 +151,6 @@ function collectFactors(form) {
   });
 }
 
-function animatePanelsIn() {
-  animatedPanels.forEach((panel, index) => {
-    panel.hidden = false;
-    panel.removeAttribute("hidden");
-    panel.style.setProperty("--enter-delay", `${index * 70}ms`);
-    panel.classList.remove("is-entered", "is-visible");
-    panel.classList.add("is-entering");
-
-    window.requestAnimationFrame(() => {
-      panel.classList.add("is-entered");
-      panel.classList.add("is-visible");
-    });
-
-    window.setTimeout(() => {
-      panel.classList.remove("is-entering");
-    }, 420 + index * 70);
-  });
-}
-
-function resetPanelAnimation() {
-  animatedPanels.forEach((panel) => {
-    panel.hidden = true;
-    panel.setAttribute("hidden", "");
-    panel.classList.remove("is-entering", "is-entered", "is-visible");
-    panel.style.removeProperty("--enter-delay");
-  });
-}
-
 function scrollToPanel(panel) {
   window.setTimeout(() => {
     try {
@@ -257,7 +228,10 @@ function setMode(mode) {
   modeEyebrow.textContent = model.eyebrow;
   modeTitle.textContent = model.title;
   modeSummary.textContent = model.summary;
-  animatePanelsIn();
+  conditionsPanel.hidden = false;
+  conditionsPanel.removeAttribute("hidden");
+  scorePanel.hidden = false;
+  scorePanel.removeAttribute("hidden");
   scrollToPanel(conditionsPanel);
 
   updateScore();
@@ -268,31 +242,24 @@ function showSetupChooser() {
   selectorPanel.hidden = false;
   selectorPanel.removeAttribute("hidden");
   selectorPanel.classList.remove("is-exiting", "is-hidden");
-  selectorPanel.classList.add("is-returning");
-  resetPanelAnimation();
+  conditionsPanel.hidden = true;
+  conditionsPanel.setAttribute("hidden", "");
+  scorePanel.hidden = true;
+  scorePanel.setAttribute("hidden", "");
 
   modeButtons.forEach((button) => {
     button.classList.remove("is-active");
     button.setAttribute("aria-pressed", "false");
   });
 
-  window.setTimeout(() => {
-    selectorPanel.classList.remove("is-returning");
-  }, 320);
   scrollToPanel(selectorPanel);
 }
 
 modeButtons.forEach((button) => {
   button.addEventListener("click", () => {
     setMode(button.dataset.mode);
-    selectorPanel.classList.add("is-exiting");
-
-    window.setTimeout(() => {
-      selectorPanel.classList.add("is-hidden");
-      selectorPanel.hidden = true;
-      selectorPanel.setAttribute("hidden", "");
-      selectorPanel.classList.remove("is-exiting");
-    }, 220);
+    selectorPanel.hidden = true;
+    selectorPanel.setAttribute("hidden", "");
   });
 });
 
