@@ -155,6 +155,7 @@ function collectFactors(form) {
 function animatePanelsIn() {
   animatedPanels.forEach((panel, index) => {
     panel.hidden = false;
+    panel.removeAttribute("hidden");
     panel.style.setProperty("--enter-delay", `${index * 70}ms`);
     panel.classList.remove("is-entered");
     panel.classList.add("is-entering");
@@ -172,9 +173,16 @@ function animatePanelsIn() {
 function resetPanelAnimation() {
   animatedPanels.forEach((panel) => {
     panel.hidden = true;
+    panel.setAttribute("hidden", "");
     panel.classList.remove("is-entering", "is-entered");
     panel.style.removeProperty("--enter-delay");
   });
+}
+
+function scrollToPanel(panel) {
+  window.setTimeout(() => {
+    panel.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, 40);
 }
 
 function getBand(model, score) {
@@ -238,6 +246,7 @@ function setMode(mode) {
   modeTitle.textContent = model.title;
   modeSummary.textContent = model.summary;
   animatePanelsIn();
+  scrollToPanel(conditionsPanel);
 
   updateScore();
 }
@@ -245,6 +254,7 @@ function setMode(mode) {
 function showSetupChooser() {
   currentMode = null;
   selectorPanel.hidden = false;
+  selectorPanel.removeAttribute("hidden");
   selectorPanel.classList.remove("is-exiting");
   selectorPanel.classList.add("is-returning");
   resetPanelAnimation();
@@ -257,6 +267,7 @@ function showSetupChooser() {
   window.setTimeout(() => {
     selectorPanel.classList.remove("is-returning");
   }, 320);
+  scrollToPanel(selectorPanel);
 }
 
 modeButtons.forEach((button) => {
@@ -264,6 +275,7 @@ modeButtons.forEach((button) => {
     selectorPanel.classList.add("is-exiting");
     window.setTimeout(() => {
       selectorPanel.hidden = true;
+      selectorPanel.setAttribute("hidden", "");
       selectorPanel.classList.remove("is-exiting");
       setMode(button.dataset.mode);
     }, 220);
