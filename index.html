@@ -6,104 +6,258 @@
     <meta name="theme-color" content="#d87a2f" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <title>Indoor Scent Difficulty</title>
+    <title>Scent Difficulty</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <main class="app-shell">
       <section class="hero-card">
-        <p class="eyebrow">Indoor Scent Work</p>
-        <h1>Assess indoor search difficulty before you set the hide.</h1>
+        <p class="eyebrow">Scent Difficulty</p>
+        <h1>Assess the search picture before you set the hide.</h1>
         <p class="hero-copy">
-          Choose the indoor conditions for your setup and get a live score, a training label,
-          and a specific explanation of which variables are likely making the scent picture
-          easier or harder for the dog.
+          Start by choosing indoors or outdoors. The app then scores the setup and highlights
+          the exact factors most likely to make scent easier or harder for the dog.
         </p>
       </section>
 
-      <section class="panel">
+      <section class="panel selector-panel">
+        <p class="eyebrow">Start Here</p>
+        <h2>Choose the setup type</h2>
+        <p class="panel-copy">Only one choice first. Pick the environment, then fill in the details.</p>
+
+        <div class="mode-switch" role="group" aria-label="Choose setup type">
+          <button
+            id="indoorButton"
+            class="mode-button"
+            type="button"
+            data-mode="indoor"
+            aria-pressed="false"
+          >
+            Indoors
+          </button>
+          <button
+            id="outdoorButton"
+            class="mode-button"
+            type="button"
+            data-mode="outdoor"
+            aria-pressed="false"
+          >
+            Outdoors
+          </button>
+        </div>
+      </section>
+
+      <section id="conditionsPanel" class="panel" hidden>
         <div class="panel-header">
           <div>
-            <p class="eyebrow">Indoor V1</p>
-            <h2>Describe the search space</h2>
+            <p id="modeEyebrow" class="eyebrow">Indoor Model</p>
+            <h2 id="modeTitle">Describe the search space</h2>
+            <p id="modeSummary" class="panel-copy"></p>
           </div>
           <button id="resetButton" class="ghost-button" type="button">Reset</button>
         </div>
 
-        <form id="difficultyForm" class="field-grid">
+        <form id="indoorForm" class="field-grid scoring-form" hidden>
           <label class="field">
             <span>Space size</span>
-            <select name="spaceSize">
-              <option value="1" data-summary="micro space">Micro space</option>
-              <option value="2" data-summary="standard space">Standard space</option>
-              <option value="3" data-summary="large space">Large space</option>
+            <select name="spaceSize" data-label="Space size">
+              <option value="1">Micro space</option>
+              <option value="2">Standard space</option>
+              <option value="3">Large space</option>
             </select>
           </label>
 
           <label class="field">
             <span>Layout type</span>
-            <select name="layoutType">
-              <option value="1" data-summary="single room layout">Single room</option>
-              <option value="2" data-summary="multi-room connected layout">Multi-room connected</option>
-              <option value="3" data-summary="open plan layout">Open plan</option>
+            <select name="layoutType" data-label="Layout type">
+              <option value="1">Single room</option>
+              <option value="2">Multi-room connected</option>
+              <option value="3">Open plan</option>
             </select>
           </label>
 
           <label class="field">
             <span>Vertical complexity</span>
-            <select name="verticalComplexity">
-              <option value="1" data-summary="low placement">Low</option>
-              <option value="2" data-summary="mid placement">Mid</option>
-              <option value="3" data-summary="high placement">High</option>
+            <select name="verticalComplexity" data-label="Vertical complexity">
+              <option value="1">Low</option>
+              <option value="2">Mid</option>
+              <option value="3">High</option>
             </select>
           </label>
 
           <label class="field">
             <span>Airflow complexity</span>
-            <select name="airflowComplexity">
-              <option value="1" data-summary="stable airflow">Stable</option>
-              <option value="2" data-summary="moderate airflow">Moderate</option>
-              <option value="3" data-summary="complex airflow">Complex</option>
+            <select name="airflowComplexity" data-label="Airflow complexity">
+              <option value="1">Stable</option>
+              <option value="2">Moderate</option>
+              <option value="3">Complex</option>
             </select>
           </label>
 
           <label class="field">
             <span>Corners and edges</span>
-            <select name="cornersEdges">
-              <option value="1" data-summary="trapping corners and edges">Trapping</option>
-              <option value="2" data-summary="mixed corners and open areas">Mixed</option>
-              <option value="3" data-summary="open dispersing area">Open / dispersing</option>
+            <select name="cornersEdges" data-label="Corners and edges">
+              <option value="1">Trapping</option>
+              <option value="2">Mixed</option>
+              <option value="3">Open / dispersing</option>
             </select>
           </label>
 
           <label class="field">
             <span>Surface and material</span>
-            <select name="surfaceMaterial">
-              <option value="1" data-summary="soft holding material">Soft / holding</option>
-              <option value="2" data-summary="moderate balanced material">Moderate / balanced</option>
-              <option value="3" data-summary="hard fast-moving material">Hard / fast-moving</option>
+            <select name="surfaceMaterial" data-label="Surface and material">
+              <option value="1">Soft / holding</option>
+              <option value="2">Moderate / balanced</option>
+              <option value="3">Hard / fast-moving</option>
+            </select>
+          </label>
+        </form>
+
+        <form id="outdoorForm" class="field-grid scoring-form" hidden>
+          <label class="field">
+            <span>Wind speed / stability</span>
+            <select name="windSpeed" data-label="Wind speed / stability" data-weight="3">
+              <option value="1">Still / very light / consistent</option>
+              <option value="2">Light wind / minor shifts</option>
+              <option value="3">Strong / gusty / shifting</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Wind direction</span>
+            <select name="windDirection" data-label="Wind direction" data-weight="3">
+              <option value="1">Predictable / consistent direction</option>
+              <option value="2">Slight variation</option>
+              <option value="3">Swirling / inconsistent</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Temperature</span>
+            <select name="temperature" data-label="Temperature" data-weight="2">
+              <option value="1">Cool 5-15 deg C</option>
+              <option value="2">Mild 15-22 deg C</option>
+              <option value="3">Hot above 22 deg C</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Humidity</span>
+            <select name="humidity" data-label="Humidity" data-weight="2">
+              <option value="1">High humidity</option>
+              <option value="2">Moderate</option>
+              <option value="3">Dry air</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Time of day</span>
+            <select name="timeOfDay" data-label="Time of day" data-weight="3">
+              <option value="1">Night / early morning</option>
+              <option value="2">Morning / evening transition</option>
+              <option value="3">Midday</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Sun exposure</span>
+            <select name="sunExposure" data-label="Sun exposure" data-weight="2">
+              <option value="1">Full shade</option>
+              <option value="2">Partial sun</option>
+              <option value="3">Direct sun</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Weather / precipitation</span>
+            <select name="precipitation" data-label="Weather / precipitation" data-weight="2">
+              <option value="1">Light damp / recent light rain</option>
+              <option value="2">Dry conditions</option>
+              <option value="3">Heavy rain or very dry / windy</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Surface type</span>
+            <select name="surfaceType" data-label="Surface type" data-weight="3">
+              <option value="1">Soft grass / soil</option>
+              <option value="2">Mixed gravel / leaves</option>
+              <option value="3">Hard concrete / asphalt</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Surface condition</span>
+            <select name="surfaceCondition" data-label="Surface condition" data-weight="2">
+              <option value="1">Slightly damp / undisturbed</option>
+              <option value="2">Dry normal</option>
+              <option value="3">Very dry / frozen / heavily disturbed</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Vegetation density</span>
+            <select name="vegetationDensity" data-label="Vegetation density" data-weight="2">
+              <option value="1">Moderate vegetation</option>
+              <option value="2">Sparse or mixed</option>
+              <option value="3">Very dense or completely open</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Terrain / topography</span>
+            <select name="terrain" data-label="Terrain / topography" data-weight="1.5">
+              <option value="1">Flat</option>
+              <option value="2">Slight slope</option>
+              <option value="3">Complex hills / dips / uneven ground</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Contamination</span>
+            <select name="contamination" data-label="Contamination" data-weight="1.5">
+              <option value="1">Clean area</option>
+              <option value="2">Some foot traffic</option>
+              <option value="3">Heavy traffic / multiple scent layers</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Time since hide</span>
+            <select name="timeSinceHide" data-label="Time since hide" data-weight="2.5">
+              <option value="1">Fresh under 10 minutes</option>
+              <option value="2">10-30 minutes</option>
+              <option value="3">Aged over 30 minutes</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Environmental stability</span>
+            <select name="environmentalStability" data-label="Environmental stability" data-weight="1.5">
+              <option value="1">Stable conditions</option>
+              <option value="2">Mild changes</option>
+              <option value="3">Actively changing</option>
             </select>
           </label>
         </form>
       </section>
 
-      <section class="score-panel">
+      <section id="scorePanel" class="score-panel" hidden>
         <div class="score-ring">
           <div class="score-ring-inner">
-            <span id="scoreValue">6</span>
+            <span id="scoreValue">0</span>
             <span class="score-label">Difficulty</span>
+            <span id="scoreMeta" class="score-meta"></span>
           </div>
         </div>
 
         <div class="score-details">
-          <p id="bandLabel" class="band-label">Beginner</p>
-          <p id="bandDescription" class="band-description">
-            This setup gives the dog a cleaner indoor scent picture with fewer competing scent effects.
-          </p>
+          <p id="bandLabel" class="band-label"></p>
+          <p id="bandDescription" class="band-description"></p>
 
           <div class="insight-block">
-            <p class="insight-title">Top contributors</p>
-            <ul id="topFactors" class="chip-list"></ul>
+            <p class="insight-title">Main difficulty drivers</p>
+            <ul id="whyList" class="reason-list"></ul>
           </div>
 
           <div class="insight-block">
@@ -112,8 +266,8 @@
           </div>
 
           <p class="heuristic-note">
-            This score is a practical training heuristic. Real scent behavior still depends on
-            combinations, timing, and what the dog brings into the search that day.
+            This score is a training heuristic. Real scent behavior still depends on timing,
+            combinations, and what the dog brings into the search that day.
           </p>
         </div>
       </section>
